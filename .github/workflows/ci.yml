@@ -1,0 +1,13 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  pipeline:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: python pipeline/make_synthetic.py --n-episodes 2 --frames 120
+      - run: python pipeline/profile.py --data data
+      - run: python pipeline/quality.py --data data --target-hz 30
